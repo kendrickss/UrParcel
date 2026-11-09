@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Something — Ken</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  --cream:#f5f0e8;
+  --paper:#c9a477;
+  --ink:#39352f;
+  --gold:#a8885d;
+}
+
+body {
+  min-height:100vh;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+}
+
+button,input { font:inherit; }
+.hidden { display:none!important; }
+
+.screen {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px 14px;
+}
+
+.intro,.ending {
+  width:100%;
+  max-width:410px;
+  text-align:center;
+  padding:30px 22px;
+}
+
+.eyebrow {
+  font-size:10px;
+  letter-spacing:4px;
+  color:var(--gold);
+  font-weight:800;
+}
+
+h1 {
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:36px;
+  margin:20px 0 12px;
+}
+
+.description {
+  font-size:13px;
+  line-height:1.9;
+  color:#8d8275;
+}
+
+input {
+  width:100%;
+  margin:26px 0 13px;
+  padding:15px;
+  border:1px solid #d9c9b4;
+  border-radius:5px;
+  background:#fffdf9;
+  text-align:center;
+  outline:none;
+  color:var(--ink);
+}
+
+input:focus { border-color:var(--gold); }
+
+.btn {
+  border:0;
+  padding:14px 25px;
+  background:#574a3c;
+  color:white;
+  cursor:pointer;
+  font-size:11px;
+  letter-spacing:1.5px;
+  border-radius:3px;
+}
+
+.footnote {
+  margin-top:23px;
+  font-size:10px;
+  color:#a99a87;
+  letter-spacing:1px;
+}
+
+/* GIFT SCREEN */
+
+#giftScreen {
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:25px 12px 30px;
+}
+
+.gift-heading {
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.gift-heading h2 {
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  font-weight:500;
+  margin:10px 0;
+}
+
+.gift-heading p {
+  color:#928574;
+  font-size:12px;
+}
+
+/* PLAYGROUND */
+
+.playground {
+  position:relative;
+  width:min(100%,480px);
+  height:570px;
+  overflow:hidden;
+  border-radius:12px;
+}
+
+/* PAPER BAG */
+
+.bag {
+  position:absolute;
+  width:145px;
+  height:185px;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.12),
+      transparent 25%,
+      rgba(95,56,24,.06)
+    ),
+    #c9a477;
+  box-shadow:8px 12px 25px #55412c22;
+  cursor:pointer;
+  z-index:5;
+  transition:transform .25s;
+}
+
+.bag:active {
+  transform:translateX(-50%) scale(.95);
+}
+
+.bag::before {
+  content:'';
+  position:absolute;
+  right:-15px;
+  top:5px;
+  width:15px;
+  height:180px;
+  background:#a77d53;
+  clip-path:polygon(0 0,100% 5%,100% 95%,0 100%);
+}
+
+.bag::after {
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-7px;
+  width:100%;
+  height:7px;
+  background:#98704b;
+}
+
+.handles {
+  position:absolute;
+  top:-49px;
+  width:100%;
+  height:65px;
+  pointer-events:none;
+}
+
+.handle {
+  position:absolute;
+  width:43px;
+  height:65px;
+  border:4px solid #96704c;
+  border-bottom:none;
+  border-radius:40px 40px 0 0;
+}
+
+.handle.left { left:30px; }
+.handle.right { right:30px; }
+
+.bag-front {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  text-align:center;
+  z-index:2;
+}
+
+.bag-text {
+  font-family:'Playfair Display',serif;
+  font-size:15px;
+  line-height:1.65;
+  color:#493927;
+}
+
+.bag-text small {
+  display:block;
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:8px;
+}
+
+.bag-stamp {
+  position:absolute;
+  bottom:12px;
+  width:100%;
+  text-align:center;
+  font-size:7px;
+  letter-spacing:3px;
+  color:#806345;
+  z-index:3;
+}
+
+.bag.shake {
+  animation:shake .55s ease;
+}
+
+@keyframes shake {
+  0%,100% { margin-left:0; }
+  25% { margin-left:-8px; }
+  50% { margin-left:8px; }
+  75% { margin-left:-4px; }
+}
+
+/* PRODUCTS */
+
+.product {
+  position:absolute;
+  width:112px;
+  height:125px;
+  object-fit:contain;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(2px 5px 5px #55412c30);
+  z-index:3;
+  animation:fly .75s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.product:active { cursor:grabbing; }
+
+@keyframes fly {
+  0% {
+    opacity:0;
+    transform:translateY(70px) scale(.25) rotate(-15deg);
+  }
+  65% {
+    opacity:1;
+    transform:translateY(-15px) scale(1.12) rotate(8deg);
+  }
+  100% {
+    opacity:1;
+    transform:translateY(0) scale(1) rotate(0);
+  }
+}
+
+/* PROGRESS */
+
+.progress {
+  width:min(85vw,340px);
+  height:3px;
+  background:#dfd4c6;
+  margin:12px auto 8px;
+}
+
+.progress-inner {
+  height:100%;
+  background:#907454;
+  width:0%;
+  transition:.4s;
+}
+
+.counter {
+  font-size:10px;
+  color:#958675;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+.instruction {
+  font-size:11px;
+  color:#928574;
+  text-align:center;
+  margin-top:12px;
+  letter-spacing:1px;
+  line-height:1.7;
+}
+
+/* DESCRIPTION MODAL */
+
+.modal {
+  position:fixed;
+  inset:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:#40372f66;
+  backdrop-filter:blur(5px);
+}
+
+.modal-card {
+  position:relative;
+  width:100%;
+  max-width:390px;
+  background:#fffdf9;
+  border:1px solid #e8dece;
+  border-radius:8px;
+  padding:22px 17px;
+  box-shadow:0 15px 50px #30251b33;
+  animation:appear .3s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity:0;
+    transform:translateY(15px) scale(.96);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.close {
+  position:absolute;
+  top:10px;
+  right:12px;
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:50%;
+  background:#eee6da;
+  color:#655541;
+  font-size:19px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-content {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding-top:12px;
+}
+
+.modal-image {
+  width:42%;
+  min-width:0;
+  height:155px;
+  object-fit:contain;
+}
+
+.modal-info {
+  flex:1;
+  min-width:0;
+  text-align:left;
+}
+
+.modal-info .eyebrow {
+  font-size:8px;
+  letter-spacing:2px;
+}
+
+.modal-info h2 {
+  font-family:'Playfair Display',serif;
+  font-size:21px;
+  font-weight:600;
+  margin:10px 0;
+  color:#594936;
+}
+
+.modal-info p {
+  font-size:11px;
+  line-height:1.8;
+  color:#8b7d6c;
+  overflow-wrap:anywhere;
+}
+
+.modal-note {
+  margin-top:18px;
+  border-top:1px solid #eee5d9;
+  padding-top:12px;
+  font-size:9px;
+  color:#a38b6b;
+  letter-spacing:1px;
+  text-align:center;
+}
+
+/* ENDING */
+
+.ending h1 {
+  color:#725c45;
+  font-size:39px;
+}
+
+.final-text {
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  line-height:1.9;
+  margin:27px 0;
+  color:#6b5948;
+}
+
+.signature {
+  font-size:12px;
+  letter-spacing:3px;
+  color:#a0825e;
+  margin-top:25px;
+}
+
+.ornament {
+  font-size:23px;
+  color:#ad926e;
+  margin:23px;
+}
+
+@media(max-width:380px) {
+  .playground { height:530px; }
+  .product {
+    width:100px;
+    height:115px;
+  }
+  .modal-card { padding:20px 13px; }
+  .modal-content { gap:10px; }
+  .modal-image { height:135px; }
+  .modal-info h2 { font-size:18px; }
+  .modal-info p { font-size:10px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop preload="auto">
+  <source src="song.m4a" type="audio/mp4">
+</audio>
+
+<section class="screen" id="intro">
+  <div class="intro">
+    <div class="eyebrow">Bingkisan Cenah.</div>
+    <h1>Hello Imut.</h1>
+    <p class="description">
+      Ini bingkisan ultah dr gua fufufu,
+      Selamat unboxing.
+    </p>
+
+    <input
+      id="visitorName"
+      placeholder="Enter your name..."
+      maxlength="35"
+      autocomplete="off"
+    >
+
+    <button class="btn" onclick="begin()">
+      CONTINUE →
+    </button>
+
+    <p class="footnote">PREPARED WITH LOVE · KEN</p>
+  </div>
+</section>
+
+<section class="screen hidden" id="giftScreen">
+  <div class="gift-heading">
+    <div class="eyebrow">SPECIAL DELIVERY</div>
+    <h2>A little Parcel for you.</h2>
+    <p>Barangnya bisa digerakin btw, biar ga berantakan, disusun aje</p>
+  </div>
+
+  <div class="playground" id="playground">
+    <div class="bag" id="bag" onclick="releaseNext()">
+      <div class="handles">
+        <div class="handle left"></div>
+        <div class="handle right"></div>
+      </div>
+
+      <div class="bag-front">
+        <div class="bag-text">
+          Thank you for
+          remembering me
+          <span id="bagName"></span>
+          <small>— KEN</small>
+        </div>
+      </div>
+
+      <div class="bag-stamp">A LITTLE GIFT</div>
+    </div>
+  </div>
+
+  <p class="instruction" id="instruction">
+    TAP THE BAG TO TAKE ONE GIFT OUT
+  </p>
+
+  <div class="progress">
+    <div class="progress-inner" id="progressInner"></div>
+  </div>
+
+  <div class="counter" id="counter">
+    0 / 12 LITTLE SURPRISES
+  </div>
+</section>
+
+<div class="modal hidden" id="modal">
+  <div class="modal-card">
+    <button
+      class="close"
+      onclick="closeModal()"
+      aria-label="Close"
+    >×</button>
+
+    <div class="eyebrow">A LITTLE SOMETHING FOR YOU</div>
+
+    <div class="modal-content">
+      <img id="modalImage" class="modal-image" src="" alt="">
+
+      <div class="modal-info">
+        <div class="eyebrow">YOUR LITTLE PARCEL</div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+      </div>
+    </div>
+
+    <div class="modal-note">
+      MADE BY KEN PACAL WONY
+    </div>
+  </div>
+</div>
+
+<section class="screen hidden" id="ending">
+  <div class="ending">
+    <div class="eyebrow">A LITTLE NOTE FOR YOU</div>
+    <div class="ornament">✳ ✳ ✳</div>
+    <h1>Thank you.</h1>
+
+    <p class="final-text">
+      Thank you for remembering me on my special day.
+      Nih ciki ciki, Enjoy
+      <b id="finalName"></b>
+    </p>
+
+    <div class="ornament">✦</div>
+
+    <div class="signature">
+      WITH LOVE,<br><br>
+      KEN.
+    </div>
+
+    <p class="footnote">A LITTLE GIFT, A LITTLE MEMORY.</p>
+  </div>
+</section>
+
+<script>
+
+/* ALL PRODUCTS */
+
+const products = [
+  {
+    name:"Coki Coki",
+    image:"https://i.ibb.co.com/LznQy0LY/14176-removebg-preview.png",
+    description:"Nih cuki cuki, mam biar gigi lau bolong.."
+  },
+  {
+    name:"Sunlit",
+    image:"https://i.ibb.co.com/bMyKFWzM/14184-removebg-preview.png",
+    description:"Buat cuci piring abis makan ciki ciki, tapi, ciki ciki emang pake piring?"
+  },
+  {
+    name:"Diary Milk",
+    image:"https://i.ibb.co.com/XfjCX9Zr/14186-removebg-preview.png",
+    description:"Mam coklat biar giginya lubang fufufufu, atiati, janlup sikat gigi coklat lu mtuh."
+  },
+  {
+    name:"Nasi",
+    image:"https://i.ibb.co.com/Pv44qfPs/14190-removebg-preview.png",
+    description:"Mam apa apa harus pake nasi alrite."
+  },
+  {
+    name:"Beng-Beng",
+    image:"https://i.ibb.co.com/M5NmJrdF/14177-removebg-preview.png",
+    description:"Jangan lupa sebelum mam, masukin kulkas, biar enyak. Gua jg mau inimah, sisain yes."
+  },
+  {
+    name:"Minyak Goreng",
+    image:"https://i.ibb.co.com/tMRFPtq9/14183-removebg-preview.png",
+    description:"Goreng aja orang-orang jahat disekitar lu, ini bentuk dukungan dr gw, minyak mhal bos, gw beri free."
+  },
+  {
+    name:"Eskrim",
+    image:"https://i.ibb.co.com/G46SDTX1/14185-removebg-preview.png",
+    description:"Ada udin ada petot, cuaca dingin enaknya makan eskrim, sekte mana kagataudeh, biar jd elsa frozen lu dgin dingin mam es."
+  },
+  {
+    name:"Cimory",
+    image:"https://i.ibb.co.com/PzvH6WHv/14181-removebg-preview.png",
+    description:"Untuk cemilan sehat, drpd nyemilin apaan ntah apa ntar apa apa pula jadinya."
+  },
+  {
+    name:"Kecap",
+    image:"https://i.ibb.co.com/5Wh7DV1f/14182-removebg-preview.png",
+    description:"Gw jg gangrti knp ada kecap di bingkisannya, masakin nasgor boleh."
+  },
+  {
+    name:"Susu",
+    image:"https://i.ibb.co.com/0jS6frjw/14187-removebg-preview.png",
+    description:"Karna gw gabisa minum susu, lu aja yang minum, kalo lu gabisa jg, yaudahlah minum bareng biar sama sama kit perut."
+  },
+  {
+    name:"Ayam",
+    image:"https://i.ibb.co.com/0jhHTS2f/14188-removebg-preview.png",
+    description:"Nghh, ange ayam krispi."
+  },
+  {
+    name:"Kinder Joy",
+    image:"https://i.ibb.co.com/pr2pScgd/14178-removebg-preview.png",
+    description:"Yang biru sama yang biasa abis, sisa yang pink, kalo dapet Barbie kasi gua ya, mau gua pajang dimuseum."
+  }
+];
+
+
+/* VARIABLES */
+
+let visitor = "";
+let shuffled = [];
+let nextIndex = 0;
+let activeProduct = null;
+
+let dragging = null;
+let dragStart = null;
+let offsetX = 0;
+let offsetY = 0;
+let hasMoved = false;
+let releaseTimer = null;
+let endingTimer = null;
+
+const music = document.getElementById("music");
+
+let audioContext = null;
+
+
+/* SOUND EFFECT */
+
+function sound(type = "pop") {
+  try {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    if (!audioContext) {
+      audioContext = new AudioContextClass();
+    }
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const now = audioContext.currentTime;
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    osc.type = "sine";
+
+    if (type === "open") {
+      osc.frequency.setValueAtTime(400, now);
+      osc.frequency.exponentialRampToValueAtTime(1000, now + .3);
+
+      gain.gain.setValueAtTime(.12, now);
+      gain.gain.exponentialRampToValueAtTime(.001, now + .4);
+
+      osc.start(now);
+      osc.stop(now + .4);
+    } else {
+      osc.frequency.setValueAtTime(700, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + .1);
+
+      gain.gain.setValueAtTime(.09, now);
+      gain.gain.exponentialRampToValueAtTime(.001, now + .22);
+
+      osc.start(now);
+      osc.stop(now + .22);
+    }
+
+    osc.onended = () => {
+      osc.disconnect();
+      gain.disconnect();
+    };
+
+  } catch(e) {}
+}
+
+
+/* START */
+
+function begin() {
+  const value = document
+    .getElementById("visitorName")
+    .value.trim();
+
+  if (!value) {
+    document.getElementById("visitorName").focus();
+    return;
+  }
+
+  visitor = value;
+
+  document.getElementById("bagName").textContent =
+    " " + visitor;
+
+  document.getElementById("finalName").textContent =
+    " " + visitor + ".";
+
+  document.getElementById("intro")
+    .classList.add("hidden");
+
+  document.getElementById("giftScreen")
+    .classList.remove("hidden");
+
+  shuffled = [...products];
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [shuffled[i], shuffled[j]] =
+      [shuffled[j], shuffled[i]];
+  }
+
+  music.volume = .45;
+
+  music.play().catch(() => {
+    console.log("Music playback requires user interaction.");
+  });
+
+  sound("open");
+}
+
+
+/* RELEASE ONE ITEM */
+
+function releaseNext() {
+  if (
+    nextIndex >= shuffled.length ||
+    activeProduct ||
+    dragging ||
+    releaseTimer
+  ) return;
+
+  const bag = document.getElementById("bag");
+
+  bag.classList.remove("shake");
+  void bag.offsetWidth;
+  bag.classList.add("shake");
+
+  const item = shuffled[nextIndex];
+  nextIndex++;
+
+  sound("open");
+
+  releaseTimer = setTimeout(() => {
+    releaseTimer = null;
+    createProduct(item);
+  }, 300);
+}
+
+
+/* CREATE PRODUCT */
+
+function createProduct(item) {
+  const playground = document.getElementById("playground");
+  const img = document.createElement("img");
+
+  img.src = item.image;
+  img.alt = item.name;
+  img.className = "product";
+  img.draggable = false;
+
+  const w = window.innerWidth <= 380 ? 100 : 112;
+  const h = window.innerWidth <= 380 ? 115 : 125;
+
+  const maxX = Math.max(0, playground.clientWidth - w);
+  const maxY = Math.max(15, playground.clientHeight - 280);
+
+  const x = Math.random() * maxX;
+  const y = 15 + Math.random() * Math.max(0, maxY - 15);
+
+  img.style.left = Math.min(x, maxX) + "px";
+  img.style.top = Math.min(y, maxY) + "px";
+
+  img.addEventListener("pointerdown", startDrag);
+  img.addEventListener("pointermove", moveDrag);
+  img.addEventListener("pointerup", endDrag);
+  img.addEventListener("pointercancel", endDrag);
+  img.addEventListener("lostpointercapture", endDrag);
+
+  img.addEventListener("click", () => {
+    if (!hasMoved && !activeProduct && !dragging) {
+      showDescription(item);
+    }
+  });
+
+  img.onerror = () => {
+    img.alt = item.name + " image unavailable";
+  };
+
+  playground.appendChild(img);
+
+  sound("pop");
+  updateProgress();
+
+  showDescription(item);
+
+  if (nextIndex === shuffled.length) {
+    document.getElementById("instruction").textContent =
+      "THE LAST LITTLE GIFT IS HERE ♡";
+  } else {
+    document.getElementById("instruction").textContent =
+      "CLOSE THE NOTE, THEN TAP THE BAG FOR ANOTHER GIFT";
+  }
+}
+
+
+/* DESCRIPTION */
+
+function showDescription(item) {
+  if (activeProduct) return;
+
+  activeProduct = item;
+
+  document.getElementById("modalImage").src = item.image;
+  document.getElementById("modalImage").alt = item.name;
+  document.getElementById("modalTitle").textContent = item.name;
+  document.getElementById("modalDescription").textContent = item.description;
+
+  document.getElementById("modal")
+    .classList.remove("hidden");
+
+  sound("pop");
+}
+
+
+/* CLOSE DESCRIPTION */
+
+function closeModal() {
+  if (!activeProduct) return;
+
+  document.getElementById("modal")
+    .classList.add("hidden");
+
+  activeProduct = null;
+
+  sound("pop");
+
+  if (nextIndex === shuffled.length) {
+    document.getElementById("instruction").textContent =
+      "ALL 12 GIFTS ARE OUT. ENJOY YOUR LITTLE PARCEL";
+
+    clearTimeout(endingTimer);
+    endingTimer = setTimeout(checkEnding, 450);
+  }
+}
+
+
+/* DRAG PRODUCTS */
+
+function startDrag(e) {
+  if (activeProduct || dragging) return;
+
+  e.preventDefault();
+
+  dragging = e.currentTarget;
+  hasMoved = false;
+
+  const rect = dragging.getBoundingClientRect();
+
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+
+  dragStart = {
+    x:e.clientX,
+    y:e.clientY
+  };
+
+  dragging.style.zIndex = 10;
+  dragging.style.animation = "none";
+
+  try {
+    dragging.setPointerCapture(e.pointerId);
+  } catch(err) {}
+}
+
+
+function moveDrag(e) {
+  if (!dragging || dragging !== e.currentTarget) return;
+
+  if (
+    Math.hypot(
+      e.clientX - dragStart.x,
+      e.clientY - dragStart.y
+    ) > 5
+  ) {
+    hasMoved = true;
+  }
+
+  if (!hasMoved) return;
+
+  const area = document.getElementById("playground");
+  const rect = area.getBoundingClientRect();
+
+  let x = e.clientX - rect.left - offsetX;
+  let y = e.clientY - rect.top - offsetY;
+
+  x = Math.max(
+    0,
+    Math.min(x, area.clientWidth - dragging.offsetWidth)
+  );
+
+  y = Math.max(
+    0,
+    Math.min(y, area.clientHeight - dragging.offsetHeight)
+  );
+
+  dragging.style.left = x + "px";
+  dragging.style.top = y + "px";
+}
+
+
+function endDrag(e) {
+  if (!dragging || dragging !== e.currentTarget) return;
+
+  const released = dragging;
+
+  released.style.zIndex = 3;
+
+  try {
+    if (released.hasPointerCapture(e.pointerId)) {
+      released.releasePointerCapture(e.pointerId);
+    }
+  } catch(err) {}
+
+  dragging = null;
+
+  setTimeout(() => {
+    hasMoved = false;
+  }, 80);
+}
+
+
+/* PROGRESS */
+
+function updateProgress() {
+  document.getElementById("counter").textContent =
+    nextIndex + " / 12 LITTLE SURPRISES";
+
+  document.getElementById("progressInner").style.width =
+    (nextIndex / products.length * 100) + "%";
+}
+
+
+/* ENDING */
+
+function checkEnding() {
+  if (
+    nextIndex === products.length &&
+    activeProduct === null &&
+    !dragging
+  ) {
+    document.getElementById("giftScreen")
+      .classList.add("hidden");
+
+    document.getElementById("ending")
+      .classList.remove("hidden");
+
+    sound("open");
+  }
+}
+
+
+/* ENTER TO CONTINUE */
+
+document.getElementById("visitorName")
+.addEventListener("keydown", e => {
+  if (e.key === "Enter") begin();
+});
+
+</script>
+
+</body>
+</html>
